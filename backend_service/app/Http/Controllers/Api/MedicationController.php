@@ -58,7 +58,14 @@ class MedicationController extends Controller
      */
     public function update(UpdateMedicationRequest $request, int $medication): JsonResponse
     {
-        $userMedication = $this->findMedicationForUser($request, $medication);
+        $userMedication = Medication::query()->findOrFail($medication);
+
+        if ($userMedication->user_id !== $request->user()->id) {
+            return response()->json([
+                'message' => 'Unauthorized.',
+            ], 403);
+        }
+
         $userMedication->update($request->validated());
 
         return response()->json([
@@ -72,7 +79,15 @@ class MedicationController extends Controller
      */
     public function destroy(Request $request, int $medication): JsonResponse
     {
-        $userMedication = $this->findMedicationForUser($request, $medication);
+        $userMedication = Medication::query()->findOrFail($medication);
+
+        if ($userMedication->user_id !== $request->user()->id) {
+            return response()->json([
+                'message' => 'Unauthorized.',
+            ], 403);
+        }
+
+        $userMedication->schedules()->delete();
         $userMedication->delete();
 
         return response()->json([

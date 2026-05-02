@@ -1,0 +1,6 @@
+pandas
+scikit-learn
+faker
+joblib
+fastapi
+uvicorn
