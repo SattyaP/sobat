@@ -6,11 +6,8 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 app = FastAPI(title="SOBAT AI Prediction Service")
-
-
 class PredictionRequest(BaseModel):
     time_difference_minutes: int = Field(ge=0, le=1440)
-
 
 model = None
 model_load_error = None
